@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Awesome go-echarts</title>
+    <script src="https://go-echarts.github.io/go-echarts-assets/assets/echarts.min.js"></script>
+    <script src="https://go-echarts.github.io/go-echarts-assets/assets/echarts-gl.min.js"></script>
+    <link href="https://go-echarts.github.io/go-echarts-assets/assets/bulma.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="select" style="margin-right:10px; margin-top:10px; position:fixed; right:10px;"></div>
+
+<div class="container">
+    <div class="item" id="tQhGasOEvYev"
+         style="width:900px;height:500px;"></div>
+</div>
+<script type="text/javascript">
+    "use strict";
+    let myChart_tQhGasOEvYev = echarts.init(document.getElementById('tQhGasOEvYev'), "white");
+    let option_tQhGasOEvYev = {
+        title: {"text":"Scatter3D-示例图",},
+        tooltip: {},
+        legend: {},
+        visualMap:[{"calculable":true,"min":50,"max":100,"inRange":{"color":["#313695","#4575b4","#74add1","#abd9e9","#e0f3f8","#fee090","#fdae61","#f46d43","#d73027","#a50026"]}}],
+        xAxis3D: {},
+        yAxis3D: {},
+        zAxis3D: {},
+        grid3D: {"boxWidth":200,"boxDepth":80,},
+        series: [
+        {"name":"scatter3d","type":"scatter3D","coordinateSystem":"cartesian3D","data":[[10,51,21],[51,37,20],[58,48,16],[49,84,87],[74,36,15],[73,68,91],[90,31,73],[56,11,37],[78,9,72],[50,88,71],[44,43,23],[59,3,39],[83,7,32],[80,15,16],[20,71,52],[7,19,62],[10,97,5],[21,17,12],[49,79,33],[25,46,34],[18,1,4],[10,24,17],[69,79,69],[50,57,23],[12,2,55],[57,43,1],[19,18,94],[41,88,21],[11,80,43],[55,41,53],[31,17,31],[18,32,14],[4,80,0],[71,85,23],[41,5,58],[65,68,83],[50,79,12],[13,71,22],[23,89,64],[87,37,99],[29,44,52],[29,22,99],[88,14,6],[96,11,43],[11,88,29],[0,38,8],[59,35,58],[2,39,47],[97,29,76],[38,30,75],[41,49,51],[4,21,74],[39,0,12],[89,66,36],[67,1,93],[84,59,79],[36,75,87],[97,44,65],[15,10,44],[47,40,28],[86,36,7],[89,0,18],[58,12,97],[49,56,50],[40,50,82],[80,13,50],[56,40,35],[14,29,9],[66,0,65],[33,95,13],[40,5,52],[17,35,20],[66,51,16],[90,52,11],[67,18,43],[42,24,67],[76,9,10],[86,0,76],[95,28,59],[15,99,54]],"label":{"show":false},"emphasis":{"label":{"show":false},},"markLine":{"label":{"show":false}},"markPoint":{"label":{"show":false}},},
+        ],
+        color: ["#c23531","#2f4554","#61a0a8","#d48265","#91c7ae","#749f83","#ca8622","#bda29a","#6e7074","#546570","#c4ccd3"],
+    };
+    myChart_tQhGasOEvYev.setOption(option_tQhGasOEvYev);
+</script>
+
+<style>
+    .container {margin-top:30px; display: flex;justify-content: center;align-items: center;}
+    .item {margin: auto;}
+</style>
+</body>
+</html>

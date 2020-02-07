@@ -1,7 +1,11 @@
-package math
+package main
 
-import "fmt"  
- 
-func main() {  
-fmt.Println("hello world")  
-}  
+import (
+	"bohao"
+	"fmt"
+)
+
+func main() {
+	fmt.Println("hello world")
+	bohao.Ppp()
+}
