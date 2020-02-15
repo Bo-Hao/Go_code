@@ -106,9 +106,7 @@ func main() {
 
 	for i := 0; i < 1000; i++ {
 		vm.Reset()
-		if err = vm.RunAll(); err != nil {
-			panic(err)
-		}
+		vm.RunAll()
 		solver.Step(NodesToValueGrads(m.learnables()))
 		fmt.Println("\n State at iter ", i)
 		fmt.Println("Cost: \n", cost.Value())

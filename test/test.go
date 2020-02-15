@@ -1,33 +1,36 @@
-package main 
+package main
 
-import(
+import (
 	"fmt"
-	//"bohao"
-	"os"
-	"encoding/csv"
+
+	"gorgonia.org/gorgonia"
 )
 
- 
 func main() {
-	//Open csv
-	f, err := os.Open("out_rab.csv")
-	if err != nil{panic(err)}
+	var x, y, z *gorgonia.Node
+	var err error
 
-	r := csv.NewReader(f)
-	record, err := r.ReadAll()
-	if err != nil{panic(err)}
+	g := gorgonia.NewGraph()
+	x = gorgonia.NewScalar(g, gorgonia.Float64, gorgonia.WithName("x"))
+	y = gorgonia.NewScalar(g, gorgonia.Float64, gorgonia.WithName("y"))
 
-	fmt.Println(record)
+	if z, err = gorgonia.Add(x, y); err != nil {
+		panic(err)
+	}
+
+	vm := gorgonia.NewTapeMachine(g)
+	defer vm.Close()
+	var Val float64
+	Val = 2.0
+	gorgonia.Let(x, Val)
+	gorgonia.Let(y, 3.0)
+	vm.RunAll()
+	fmt.Println(z.Value())
+
+	Val = 3.0
+	gorgonia.Let(x, Val)
+	gorgonia.Let(y, 3.0)
+	vm.RunAll()
+	fmt.Println(z.Value())
 
 }
-
-/* func main() {
-	m1:= bohao.Matrix([]float64{1, 2, 3, 4, 5, 6}, []int{2, 3})
-	fmt.Println(m1)
-	m2:= bohao.Matrix([]float64{1, 2, 3, 4, 5, 6}, []int{3, 2})
-	fmt.Println(m2)
-
-	fmt.Println(bohao.Dot(m1, m2))
-
-	fmt.Println(bohao.Transpose(m1))
-} */
