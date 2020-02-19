@@ -136,7 +136,7 @@ func (m *nn) learnables() gorgonia.Nodes {
 
 func main() {
 	rand.Seed(1377)
-	var epoches int = 10
+	var epoches int = 100
 
 	g := gorgonia.NewGraph()
 	m := newNN(g)
@@ -145,10 +145,7 @@ func main() {
 	train_data, train_label, test_data, test_label := train_test_split(csvdata, 0.2)
 
 	xT := tensor.New(tensor.WithBacking(train_data), tensor.WithShape(120, 4))
-	xVal := gorgonia.NewMatrix(g, tensor.Float64, gorgonia.WithName("x"), gorgonia.WithValue(xT))
-
 	yT := tensor.New(tensor.WithBacking(train_label), tensor.WithShape(120, 1))
-	yVal := gorgonia.NewMatrix(g, tensor.Float64, gorgonia.WithName("y"), gorgonia.WithValue(yT))
 
 	//define input output
 	x := gorgonia.NewMatrix(g, tensor.Float64, gorgonia.WithShape(120, 4), gorgonia.WithName("x"))
@@ -176,8 +173,8 @@ func main() {
 	defer vm.Close()
 
 	for epoch := 0; epoch < epoches; epoch++ {
-		gorgonia.UnsafeLet(x, xVal)
-		gorgonia.UnsafeLet(y, yVal)
+		gorgonia.Let(x, xT)
+		gorgonia.Let(y, yT)
 
 		vm.RunAll()
 		solver.Step(gorgonia.NodesToValueGrads(m.learnables()))
@@ -186,23 +183,22 @@ func main() {
 		log.Printf("Done!")
 	}
 	log.Printf("training finished!")
-	log.Printf("testint start!")
+
 	//run test
-
+	log.Printf("testint start!")
 	testxT := tensor.New(tensor.WithBacking(test_data), tensor.WithShape(30, 4))
-	xVal = gorgonia.NewMatrix(g, tensor.Float64, gorgonia.WithName("test x"), gorgonia.WithValue(testxT))
-	//x = gorgonia.NewMatrix(g, tensor.Float64, gorgonia.WithShape(30, 4), gorgonia.WithName("x"))
+	x = gorgonia.NewMatrix(g, tensor.Float64, gorgonia.WithShape(30, 4), gorgonia.WithName("x"))
+	m.forward(x)
+	vm = gorgonia.NewTapeMachine(g, gorgonia.BindDualValues(m.learnables()...))
 
-	/* testyT := tensor.New(tensor.WithBacking(test_label), tensor.WithShape(30, 1))
-	testyVal := gorgonia.NewMatrix(g, tensor.Float64, gorgonia.WithName("test y"), gorgonia.WithValue(testyT)) */
-
-	fmt.Println(m.pred.Value().Data())
-	gorgonia.Let(x, xVal)
+	gorgonia.Let(x, testxT)
 
 	vm.RunAll()
-
-	fmt.Println(m.pred.Value().Data())
 	vm.Reset()
-	fmt.Println(len(test_label))
 
+	var result []float64
+	for i := 0; i < len(test_label); i++ {
+		result = append(result, m.predVal.Data().([]float64)[i]-test_label[i])
+	}
+	fmt.Println(result)
 }
