@@ -87,6 +87,7 @@ func train_test_split(data [][]string, p float64) ([]float64, []float64, []float
 type nn struct {
 	g              *gorgonia.ExprGraph
 	w0, w1, w2, w3 *gorgonia.Node
+	d0, d1, d2     float64
 
 	pred    *gorgonia.Node
 	predVal gorgonia.Value
@@ -104,6 +105,10 @@ func newNN(g *gorgonia.ExprGraph) *nn {
 		w1: w1,
 		w2: w2,
 		w3: w3,
+
+		d0: 0.2,
+		d1: 0.2,
+		d2: 0.2,
 	}
 
 }
@@ -111,17 +116,27 @@ func newNN(g *gorgonia.ExprGraph) *nn {
 func (m *nn) forward(x *gorgonia.Node) (err error) {
 	var l0, l1, l2, l3 *gorgonia.Node
 	var l0dot, l1dot, l2dot, l3dot *gorgonia.Node
+	var p0, p1, p2 *gorgonia.Node
 
 	l0 = x
 	l0dot = gorgonia.Must(gorgonia.Mul(l0, m.w0))
+	if p0, err = gorgonia.Dropout(l0dot, m.d0); err != nil {
+		log.Fatal(err)
+	}
 
-	l1 = gorgonia.Must(gorgonia.Rectify(l0dot))
+	l1 = gorgonia.Must(gorgonia.Rectify(p0))
 	l1dot = gorgonia.Must(gorgonia.Mul(l1, m.w1))
+	if p1, err = gorgonia.Dropout(l1dot, m.d1); err != nil {
+		log.Fatal(err)
+	}
 
-	l2 = gorgonia.Must(gorgonia.Rectify(l1dot))
+	l2 = gorgonia.Must(gorgonia.Rectify(p1))
 	l2dot = gorgonia.Must(gorgonia.Mul(l2, m.w2))
+	if p2, err = gorgonia.Dropout(l2dot, m.d2); err != nil {
+		log.Fatal(err)
+	}
 
-	l3 = gorgonia.Must(gorgonia.Rectify(l2dot))
+	l3 = gorgonia.Must(gorgonia.Rectify(p2))
 	l3dot = gorgonia.Must(gorgonia.Mul(l3, m.w3))
 
 	m.pred = l3dot
