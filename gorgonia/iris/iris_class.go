@@ -172,7 +172,7 @@ func main() {
 	}
 
 	//define loss function
-	losses := gorgonia.Must(gorgonia.Square(gorgonia.Must(gorgonia.Sub(m.pred, y))))
+	losses := gorgonia.Must(gorgonia.Neg(gorgonia.Must(gorgonia.Square(gorgonia.Must(gorgonia.Sub(m.pred, y))))))
 	cost := gorgonia.Must(gorgonia.Mean(losses))
 
 	//record cost
