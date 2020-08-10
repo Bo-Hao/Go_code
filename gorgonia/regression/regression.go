@@ -224,5 +224,5 @@ func testStep() {
 
 func main() {
 	trainStep()
-	//testStep()
+	testStep()
 }
